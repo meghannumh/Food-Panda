@@ -1,3 +1,6 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
+
 const parent = React.createElement('div', 
     {id:"parent"},
     React.createElement('div', 
@@ -17,19 +20,19 @@ root.render(parent)
 
 // example for siblings 
 
-const grandFather = React.createElement('div', 
-    {id:'grandFather'},
-    React.createElement('div', 
-        {id:'father'},
-        [React.createElement('h1', 
-            {id:'son'},
-            'I am son'
-        ), React.createElement('h1', 
-            {id:'daughter'},
-            'I am daughter'
-        )]
-    )
-)
+const grandFather = React.createElement(
+  'div',
+  { id: 'grandFather' },
+  React.createElement(
+    'div',
+    { id: 'father' },
+    [
+      React.createElement('h1', { id: 'son', key: 'son' }, 'I am son'),
+      React.createElement('h1', { id: 'daughter', key: 'daughter' }, 'I am daughter')
+    ]
+  )
+);
+
 
 const root2 = ReactDOM.createRoot(document.getElementById('root2'))
 
