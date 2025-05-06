@@ -6,6 +6,7 @@ import ReactDOM from "react-dom/client";
 const heading = React.createElement("h1", {id:"heading"}, "Namaste React");
 
 console.log(heading)
+// prints objecy which is react element
 
 // const root = ReactDOM.createRoot(document.getElementById("root"));
 

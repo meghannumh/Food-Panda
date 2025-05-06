@@ -4,7 +4,7 @@
   "description": "This is Namaste React",
   "scripts": {
     "test": "jest",
-    "start": "parcel 03_react_foundation/index.html",
+    "start": "parcel 04_food-app/index.html",
     "build": "parcel build 02_nested-structure/index.html"
   },
   "repository": {
