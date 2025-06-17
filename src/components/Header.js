@@ -1,27 +1,52 @@
 import { LOGO_URL } from "../utils/constants";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
+  console.log("Header rendered");
 
-    const [btnNameReact, setStatus] = useState("Login")
+  // dont create state variables inside an if condition or loop and always create inside functional component
+  const [btnNameReact, setStatus] = useState("Login");
 
-    return (
-        <div className="header">
-            <div className="logo-container">
-                <img className="logo" src={LOGO_URL} />
-            </div>
-            <div className="nav-items">
-                <ul>
-                    <li>Home</li>
-                    <li>About Us</li>
-                    <li>Contact Us</li>   
-                    <li>Cart</li>
-                    <button className="login" onClick={() => { 
-                        btnNameReact === "Login" ? setStatus("Logout") : setStatus("Login") }}>{btnNameReact}</button>
-                </ul>
-            </div>
-        </div>
-    );
+  //if no dependency array => useEffect is called on every render
+  //if dependency array is empty => useEffect is called on intial render(just once)
+  //if dependency array is [btnNameReact] => useEffect is called everytime btnNameReact is updated
+  useEffect(() => {
+    console.log("useEffect called");
+  });
+
+  return (
+    <div className="header">
+      <div className="logo-container">
+        <img className="logo" src={LOGO_URL} />
+      </div>
+      <div className="nav-items">
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <a href="/about">About Us</a>
+          </li>
+          <li>
+            <Link to="/contact">Contact Us</Link>
+            {/* In case of <a> tag it reloads the page bbut Link does not reload it will just navigate to page */}
+          </li>
+          <li>Cart</li>
+          <button
+            className="login"
+            onClick={() => {
+              btnNameReact === "Login"
+                ? setStatus("Logout")
+                : setStatus("Login");
+            }}
+          >
+            {btnNameReact}
+          </button>
+        </ul>
+      </div>
+    </div>
+  );
 };
 
 export default Header;
