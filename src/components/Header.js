@@ -1,6 +1,7 @@
 import { LOGO_URL } from "../utils/constants";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus";
 
 export const Header = () => {
   console.log("Header rendered");
@@ -15,6 +16,10 @@ export const Header = () => {
     console.log("useEffect called");
   });
 
+  const onlineStatus = useOnlineStatus();
+  const greenDot = "🟢";
+  const redDot = "🔴";
+
   return (
     <div className="header">
       <div className="logo-container">
@@ -22,6 +27,7 @@ export const Header = () => {
       </div>
       <div className="nav-items">
         <ul>
+          <li>Online Status: {onlineStatus ? greenDot : redDot}</li>
           <li>
             <Link to="/">Home</Link>
           </li>
@@ -31,6 +37,9 @@ export const Header = () => {
           <li>
             <Link to="/contact">Contact Us</Link>
             {/* In case of <a> tag it reloads the page bbut Link does not reload it will just navigate to page */}
+          </li>
+          <li>
+            <Link to="/grocery">Grocery</Link>
           </li>
           <li>Cart</li>
           <button

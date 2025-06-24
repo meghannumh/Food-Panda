@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./components/Header";
 import Body from "./components/Body";
@@ -7,8 +7,22 @@ import About from "./components/About";
 import Contact from "./components/Contact";
 import Error from "./components/Error";
 import RestaurantMenu from "./components/RestaurantMenu";
+// import Grocery from "./components/Grocery";
+
+//Chunking
+//Bundling
+//Dynamic Bundling
+//Lazy Loading
+//On demand loading
+//All mean the same bundling which means splitting the code different bundles.
+//here the parcel makes onw single file index.js which has bundled all the files into one but by lazy a different bundle is created when the component a specific component is loaded.
+//Suspense is used becuase while loading it akes time to get the code meanwhile a fallback jsx code is written till the time the component code is loaded.
 
 // props: passing argument to a function
+
+const Grocery = lazy(() => {
+  return import("./components/Grocery");
+});
 
 const AppLayout = () => {
   return (
@@ -29,6 +43,14 @@ const appRouter = createBrowserRouter([
       { path: "/", element: <Body /> },
       { path: "/about", element: <About /> },
       { path: "/contact", element: <Contact /> },
+      {
+        path: "/Grocery",
+        element: (
+          <Suspense fallback={<h1>Loading</h1>}>
+            <Grocery />
+          </Suspense>
+        ),
+      },
       { path: "/restaurants/:resId", element: <RestaurantMenu /> },
     ],
   },

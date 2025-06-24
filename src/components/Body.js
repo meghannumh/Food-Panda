@@ -3,6 +3,7 @@ import resList from "../utils/mockData";
 import { useState, useEffect } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus";
 
 const Body = () => {
   // state variables - super powerful variables
@@ -39,6 +40,12 @@ const Body = () => {
     //Optional chaining allows you to safely access deeply nested properties of an object without having to check each level manually.
     // If any part of the chain is null or undefined, the entire expression short-circuits and returns undefined instead of throwing an error.
   };
+
+  const onlineStatus = useOnlineStatus();
+
+  if (onlineStatus === false) {
+    return <h1>Looks Like you're Offline please check internet.</h1>;
+  }
 
   //conditional rending
   if (listOfRestaurant.length === 0) {
