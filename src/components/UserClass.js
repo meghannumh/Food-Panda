@@ -38,7 +38,11 @@ class UserClass extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log("component did update");
+    console.log("child component did update");
+  }
+
+  componentWillUmount(){
+    console.log("child component will unmount") // gets called when component is different for example if the page is changed with different component.
   }
 
   render() {

@@ -1,9 +1,10 @@
-import RestaurantCard from "./RestaurantCard";
+import { RestaurantCard, withPromotedLabel } from "./RestaurantCard";
 import resList from "../utils/mockData";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 const Body = () => {
   // state variables - super powerful variables
@@ -14,8 +15,10 @@ const Body = () => {
 
   const [searchText, setSearchText] = useState("");
 
+  const RestaurantCardPromoted = withPromotedLabel(RestaurantCard);
+
   //Whenever state variables update, react triggers a recociliation cycle()
-  console.log("Body rerendered");
+  console.log("Body rerendered", listOfRestaurant);
 
   useEffect(() => {
     fetchData();
@@ -29,7 +32,8 @@ const Body = () => {
     const json = await data.json();
 
     console.log(
-      json.data.cards[1].card.card.gridElements.infoWithStyle.restaurants
+      "restaurants",
+      json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
     setListOfRestaurant(
       json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
@@ -47,22 +51,25 @@ const Body = () => {
     return <h1>Looks Like you're Offline please check internet.</h1>;
   }
 
+  const { loggedInUser, setUserName } = useContext(UserContext);
+
   //conditional rending
-  if (listOfRestaurant.length === 0) {
+  if (filteredRetaurant.length === 0) {
     return <Shimmer />;
   }
 
   return (
-    <div className="body">
-      <div className="filter">
-        <div className="search">
+    <div className="body mt-38 items-center">
+      <div className="flex items-center">
+        <div className="m-4 p-4">
           <input
             type="text"
-            className="searchBox"
+            className="border border-solid border-black"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
           <button
+            className="px-4 py-2 bg-green-100 m-4 rounded-lg"
             onClick={() => {
               //Filter the restaurant cards and update the UI
               console.log(searchText);
@@ -80,20 +87,31 @@ const Body = () => {
             Search
           </button>
         </div>
-        <button
-          className="filter-btn"
-          onClick={() => {
-            //Filter logic here
-            const filteredList = listOfRestaurant.filter(
-              (res) => res.info.avgRating > 4
-            );
-            setListOfRestaurant(filteredList);
-          }}
-        >
-          Top Rated Restaurant
-        </button>
+        <div className="m-4 p-4 flex items-center justify-between">
+          <button
+            className="px-4 py-2 bg-gray-100 rounded-lg cursor-pointer"
+            onClick={() => {
+              //Filter logic here
+              const filteredList = listOfRestaurant.filter(
+                (res) => res.info.avgRating > 4.5
+              );
+              console.log("filteredList", filteredList);
+              setFilteredRestaurant(filteredList);
+            }}
+          >
+            Top Rated Restaurant
+          </button>
+        </div>
+        <div className="m-4 p-4 flex items-center">
+          <label>UserName: </label>
+          <input
+            className="border border-black p-1"
+            value={loggedInUser}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+        </div>
       </div>
-      <div className="res-container">
+      <div className="flex flex-wrap">
         {/* <RestaurantCard resData={resList[0]}/>
                 <RestaurantCard resData={resList[1]}/>
                 <RestaurantCard resData={resList[2]}/>
@@ -107,7 +125,15 @@ const Body = () => {
               key={restaurant.info.id}
               to={"/restaurants/" + restaurant.info.id}
             >
-              <RestaurantCard resData={restaurant} />
+              {
+                /* {if the restaurant is open add a opened label to it} */
+                // restaurant.info.isOpen ? <RestaurantCardOpened /> :
+                restaurant.info.avgRating > 4.5 ? (
+                  <RestaurantCardPromoted resData={restaurant} />
+                ) : (
+                  <RestaurantCard resData={restaurant} />
+                )
+              }
             </Link>
           )) //to uniquely identify each element key is used here else we would have it would have to rerender all the elements hence optimizing the performance.
           // react says don't use index as key becuase order can change any time.

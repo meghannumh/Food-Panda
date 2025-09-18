@@ -1,7 +1,8 @@
 import { LOGO_URL } from "../utils/constants";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 export const Header = () => {
   console.log("Header rendered");
@@ -20,28 +21,32 @@ export const Header = () => {
   const greenDot = "🟢";
   const redDot = "🔴";
 
+  const { loggedInUser } = useContext(UserContext);
+
   return (
-    <div className="header">
+    <div className="flex justify-between shadow-lg bg-pink-50 fixed top-0 right-0 left-0 z-50">
       <div className="logo-container">
-        <img className="logo" src={LOGO_URL} />
+        <img className="w-56" src={LOGO_URL} />
       </div>
-      <div className="nav-items">
-        <ul>
-          <li>Online Status: {onlineStatus ? greenDot : redDot}</li>
-          <li>
+      <div className="flex items-center">
+        <ul className="flex p-4 m-4">
+          <li className="px-4">
+            Online Status: {onlineStatus ? greenDot : redDot}
+          </li>
+          <li className="px-4">
             <Link to="/">Home</Link>
           </li>
-          <li>
+          <li className="px-4">
             <a href="/about">About Us</a>
           </li>
-          <li>
+          <li className="px-4">
             <Link to="/contact">Contact Us</Link>
             {/* In case of <a> tag it reloads the page bbut Link does not reload it will just navigate to page */}
           </li>
-          <li>
+          <li className="px-4">
             <Link to="/grocery">Grocery</Link>
           </li>
-          <li>Cart</li>
+          <li className="px-4">Cart</li>
           <button
             className="login"
             onClick={() => {
@@ -52,6 +57,7 @@ export const Header = () => {
           >
             {btnNameReact}
           </button>
+          <li className="px-4 font-bold">{loggedInUser}</li>
         </ul>
       </div>
     </div>
